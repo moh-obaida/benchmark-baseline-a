@@ -5,16 +5,28 @@ import { seedIfNeeded } from "@/lib/seed";
 
 type SqlValue = string | number | bigint | null;
 
-const dataDir = path.join(process.cwd(), "data");
-const dbPath = path.join(dataDir, "yra3.sqlite");
+function resolveDataDir() {
+  if (process.env.YRA3_DATA_DIR) return process.env.YRA3_DATA_DIR;
+  const local = path.join(process.cwd(), "data");
+  try {
+    fs.mkdirSync(path.join(local, "uploads"), { recursive: true });
+    fs.accessSync(local, fs.constants.W_OK);
+    return local;
+  } catch {
+    const temporary = path.join("/tmp", "yra3");
+    fs.mkdirSync(path.join(temporary, "uploads"), { recursive: true });
+    return temporary;
+  }
+}
 
 let database: DatabaseSync | null = null;
 let ready = false;
 let seeding = false;
 
 function openDatabase() {
-  fs.mkdirSync(path.join(dataDir, "uploads"), { recursive: true });
-  const db = new DatabaseSync(dbPath);
+  const directory = resolveDataDir();
+  fs.mkdirSync(path.join(directory, "uploads"), { recursive: true });
+  const db = new DatabaseSync(path.join(directory, "yra3.sqlite"));
   db.exec("PRAGMA journal_mode = WAL;");
   db.exec("PRAGMA foreign_keys = ON;");
   db.exec("PRAGMA busy_timeout = 5000;");
@@ -262,5 +274,5 @@ export function transaction(fn: () => void) {
 }
 
 export function uploadsDir() {
-  return path.join(dataDir, "uploads");
+  return path.join(resolveDataDir(), "uploads");
 }

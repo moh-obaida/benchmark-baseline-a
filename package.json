@@ -2,7 +2,7 @@
   "name": "yaraa",
   "private": true,
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "scripts": {
     "dev": "next dev",
@@ -13,7 +13,8 @@
     "next": "^16.3.6",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "sharp": "^0.35.5"
+    "sharp": "^0.35.5",
+    "sql.js": "^1.14.2"
   },
   "devDependencies": {
     "@types/node": "^26.6.3",

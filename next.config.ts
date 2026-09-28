@@ -3,6 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   agentRules: false,
+  serverExternalPackages: ["sql.js"],
+  outputFileTracingIncludes: {
+    "/**": ["./node_modules/sql.js/dist/sql-asm.js"],
+  },
   async headers() {
     return [
       {

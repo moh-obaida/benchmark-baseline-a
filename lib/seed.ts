@@ -415,8 +415,8 @@ function ensureTag(name: string) {
 
 function ensureAdmin() {
   if (one("SELECT id FROM users WHERE role = 'admin'")) return;
-  const email = (process.env.ADMIN_EMAIL || "admin@yra3.local").toLowerCase();
-  let password = process.env.ADMIN_PASSWORD || "";
+  const email = (process.env.ADMIN_EMAIL || "admin@yara.com").toLowerCase();
+  let password = process.env.ADMIN_PASSWORD || "yara3admin12";
   if (!password) {
     password = randomBytes(9).toString("base64url");
     fs.writeFileSync(path.join(process.cwd(), "data", "admin-credentials.txt"), `email: ${email}\npassword: ${password}\n`, { flag: "wx" });

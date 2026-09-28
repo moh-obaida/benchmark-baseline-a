@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { DatabaseSync } from "node:sqlite";
 import { seedIfNeeded } from "@/lib/seed";
+import { openSqlite, type SqliteDatabase } from "@/lib/sqlite-open";
 
 type SqlValue = string | number | bigint | null;
 
@@ -19,21 +19,21 @@ function resolveDataDir() {
   }
 }
 
-let database: DatabaseSync | null = null;
+let database: SqliteDatabase | null = null;
 let ready = false;
 let seeding = false;
 
 function openDatabase() {
   const directory = resolveDataDir();
   fs.mkdirSync(path.join(directory, "uploads"), { recursive: true });
-  const db = new DatabaseSync(path.join(directory, "yra3.sqlite"));
+  const db = openSqlite(path.join(directory, "yra3.sqlite"));
   db.exec("PRAGMA journal_mode = WAL;");
   db.exec("PRAGMA foreign_keys = ON;");
   db.exec("PRAGMA busy_timeout = 5000;");
   return db;
 }
 
-function migrate(db: DatabaseSync) {
+function migrate(db: SqliteDatabase) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,

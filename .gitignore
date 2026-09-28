@@ -1,0 +1,12 @@
+node_modules
+.next
+data/*.sqlite
+data/*.sqlite-*
+data/*.sqlite-journal
+data/uploads/**
+!data/uploads/.gitkeep
+data/admin-credentials.txt
+.env
+.env.local
+tsconfig.tsbuildinfo
+*.tsbuildinfo
